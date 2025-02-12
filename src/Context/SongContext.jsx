@@ -1,42 +1,47 @@
-import { createContext, useState, useEffect, Children } from "react";
+import { createContext, useState, useEffect } from "react"
 import canciones from "../Utils/listaCanciones.json";
 
-//* 1. CREAR CONTEXTO
-const SongContext = createContext(); //creamos el contexto y mi contexto empieza vacio
+//* 1) CREAR EL CONTEXTO 
+const SongContext = createContext() // creamos el contexto y mi contexto empieza vacío
 
-//* 2. CREAR EL PROVIDER
-// EL PROVIDER ES UN COMPONENTE QUE ENVUELVE A TODOS LOS COMPONENTES
+//* 2) CREAR EL PROVIDER
+// EL PROVIDER ES UN COMPONENTE QUE ENVUELVE A TODOS LOS COMPONENTES 
 // QUE VAN A TENER ACCESO AL CONTEXTO
 
-function SongProvider({children}){
+// eslint-disable-next-line react/prop-types
+function SongProvider ({children}) {
     const [list, setList] = useState([]); // estado que va a contener la lista de canciones
-    const [loading, setLoading] = useState(true); // esta cargando la lista de canciones?
+    const [loading, setLoading] = useState(true); // ¿está cargando la lista de canciones?
     const [selectedSong, setSelectedSong] = useState({}); // estado que va a contener la cancion seleccionada
-
-
-    //simulamos la llamada a la API
+    const [search, setSearch] = useState('') // identifica la palabara que pongo en el buscador
+    
+    // simulamos la llamada a la API
     useEffect(() => {
         setTimeout(() => {
-            setList(canciones)
-            setLoading(false) // cambio a false ya estan cargando las canciones
-            
+          setList(canciones)
+          setLoading(false) // cambia a false xk ya están cargando las canciones
         }, 2000)
-    },[])
+      }, [])
 
-
-    const data = {
-        list, 
+      //mandamos un objeto
+      const data = {
+        list,
         loading,
         selectedSong,
-        setSelectedSong
-    }
-    // el provedor (provider)  es un componente que envuelve a otros componentes
+        setSelectedSong,
+        search,
+        setSearch
+      }
+      
+    // el proveedor (provider) es un componente que envuelve a otros componentes
     // y le pasa un objeto con los datos que queremos compartir
+
     return (
-        <SongContext.Provider value={data}>
-            {children}
-        </SongContext.Provider>
+        // return de un componente
+    <SongContext.Provider value={data}>
+      {children}
+    </SongContext.Provider>
     )
 }
 
-export {SongContext, SongProvider}
+export { SongContext, SongProvider }
